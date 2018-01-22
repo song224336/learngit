@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style></style>
+</head>
+<body>
+	<script>
+ function ajax({type,url,data,dataType}){
+       return new Promise(callback=>{
+	        var xhr=new XMLHttpRequest();
+	        if(type.toLowerCase()=="get"&&data!==undefined){
+	            url+="?"+data;
+			}
+	        xhr.open(type,url,true);
+            xhr.onreadystatechange=function(){
+				if(xhr.readyState==4&&xhr.status==200){
+					var resData=xhr.responseText;      
+					if(dataType!==undefined&&dataType.toLowerCase()=="json"){
+						resData=JSON.parse(resData);
+						callback(resData);
+					}
+					callback(resData);
+				}
+            
+			}
+	        if(type.toLowerCase()==="post"){
+	            xhr.setRequestHeader(
+	                "Content-Type","application/x-www-form-urlencoded"
+	            );
+			}
+	            xhr.send(type.toLowerCase()=="get"?null:data);
+		    
+	    });
+	 
+	}
+        ajax({
+			type:"get",
+			url:"server.php",
+			data:"uname=doudou&&upwd=123456",
+			dataType:"json"
+			
+		}).then(resData=>{
+			console.log("调用者想输出:");
+			console.log(resData)
+		})
+	</script>
+</body>
+</html>
